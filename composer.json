@@ -1,0 +1,53 @@
+{
+    "name": "martiadrogue/container",
+    "type": "library",
+    "description": "An amazing, easy to follow PHP dependency injection container package. Made with PSR-2 and PSR-4.",
+    "keywords": [
+        "martiadrogue",
+        "container"
+    ],
+    "homepage": "https://github.com/martiadrogue/container",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/martiadrogue/container/issues",
+        "source": "https://github.com/martiadrogue/container"
+    },
+    "authors": [
+        {
+            "name": "Martí Adrogué",
+            "email": "marti.adrogue@gmail.com",
+            "homepage": "https://github.com/martiadrogue",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : "~5.5|~7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "4.*",
+        "scrutinizer/ocular": "~1.1",
+        "squizlabs/php_codesniffer": "~2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MartiAdrogue\\Container\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MartiAdrogue\\Container\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "phpcs": "php-cs-fixer fix -v --diff --dry-run;"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}
