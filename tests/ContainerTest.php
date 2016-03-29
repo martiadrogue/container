@@ -108,45 +108,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $property);
     }
 
-
-    /** @test */
-    public function shouldReciveDepencencyOfAService() {
-        $services = [
-            'service' => [
-                'class' => MockService::class,
-                'arguments' => [
-                    new ServiceReference('dependency'),
-                    'foo',
-                ],
-                'calls' => [
-                    [
-                        'method' => 'setProperty',
-                        'arguments' => [
-                            new ParameterReference('group.param'),
-                        ],
-                    ],
-                ],
-            ],
-            'dependency' => [
-                'class' => MockDependency::class,
-                'arguments' => [
-                    new ParameterReference('group.param'),
-                ],
-            ],
-        ];
-        $parameters = [
-            'group' => [
-                'param' => 'bar',
-            ],
-        ];
-
-        $container = new Container($services, $parameters);
-        $service = $container->get('service');
-        $dependency = $container->get('dependency');
-        $this->assertInstanceOf(MockDependency::class, $dependency);
-        $this->assertSame($dependency, $service->getDependency());
-    }
-
     /**
      * @depends shouldReciveServiceRequired
      * @test
@@ -191,6 +152,44 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $dependency = $container->get('dependency');
 
         $this->assertEquals('bar', $dependency->getParameter());
+    }
+
+    /** @test */
+    public function shouldReciveDepencencyOfAService() {
+        $services = [
+            'service' => [
+                'class' => MockService::class,
+                'arguments' => [
+                    new ServiceReference('dependency'),
+                    'foo',
+                ],
+                'calls' => [
+                    [
+                        'method' => 'setProperty',
+                        'arguments' => [
+                            new ParameterReference('group.param'),
+                        ],
+                    ],
+                ],
+            ],
+            'dependency' => [
+                'class' => MockDependency::class,
+                'arguments' => [
+                    new ParameterReference('group.param'),
+                ],
+            ],
+        ];
+        $parameters = [
+            'group' => [
+                'param' => 'bar',
+            ],
+        ];
+
+        $container = new Container($services, $parameters);
+        $service = $container->get('service');
+        $dependency = $container->get('dependency');
+        $this->assertInstanceOf(MockDependency::class, $dependency);
+        $this->assertSame($dependency, $service->getDependency());
     }
 
     /**
