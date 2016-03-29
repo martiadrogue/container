@@ -138,9 +138,7 @@ class Container implements ServiceFillable, ParameterFillable
     {
         $context = $this->parameterSet;
         foreach ($tokenSet as $token) {
-            if (!isset($context[$token])) {
-                throw new ParameterNotFoundException('Parameter not found: '.$token);
-            }
+            $this->checkIfParameterExists($context, $token);
             $context = $context[$token];
         }
 
@@ -171,6 +169,13 @@ class Container implements ServiceFillable, ParameterFillable
             throw new ContainerException($name.' service calls must be arrays containing a \'method\' key');
         } elseif (!is_callable([$service, $callDefinition['method']])) {
             throw new ContainerException($name.' service asks for call to uncallable method: '.$callDefinition['method']);
+        }
+    }
+
+    public function checkIfParameterExists($context, $token)
+    {
+        if (!isset($context[$token])) {
+            throw new ParameterNotFoundException('Parameter not found: '.$token);
         }
     }
 
