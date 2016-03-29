@@ -35,11 +35,7 @@ class Container implements ServiceFillable, ParameterFillable
      */
     public function get($name)
     {
-
-        if (!$this->has($name)) {
-            throw new ServiceNotFoundException('Service not found: '.$name);
-        }
-
+        $this->checkIfServiceExists($name);
         $this->saveServiceToStore($name);
 
         return $this->serviceStore[$name];
@@ -89,15 +85,7 @@ class Container implements ServiceFillable, ParameterFillable
     private function createService($name)
     {
         $entry = &$this->serviceSet[$name];
-
-        if (!is_array($entry) || !isset($entry['class'])) {
-            throw new ContainerException($name.' service entry must be an array containing a \'class\' key');
-        } elseif (!class_exists($entry['class'])) {
-            throw new ContainerException($name.' service class does not exist: '.$entry['class']);
-        } elseif (isset($entry['lock'])) {
-            throw new ContainerException($name.' service contains a circular reference');
-        }
-
+        $this->checkIfServiceIsWellFormed($entry, $name);
         $entry['lock'] = true;
 
         $arguments = $this->getArguments($entry['arguments']);
@@ -139,11 +127,7 @@ class Container implements ServiceFillable, ParameterFillable
     private function initializeService($service, $className, $name, array $callDefinitionSet)
     {
         foreach ($callDefinitionSet as $callDefinition) {
-            if (!is_array($callDefinition) || !isset($callDefinition['method'])) {
-                throw new ContainerException($name.' service calls must be arrays containing a \'method\' key');
-            } elseif (!is_callable([$service, $callDefinition['method']])) {
-                throw new ContainerException($name.' service asks for call to uncallable method: '.$callDefinition['method']);
-            }
+            $this->checkServiceCalls($service, $callDefinition, $name);
 
             $arguments = $this->getArguments($callDefinition['arguments'], $callDefinition['arguments']);
             $this->callMethodByReflection($service, $className, $callDefinition['method'], $arguments);
@@ -161,6 +145,33 @@ class Container implements ServiceFillable, ParameterFillable
         }
 
         return $context;
+    }
+
+    private function checkIfServiceExists($name)
+    {
+        if (!$this->has($name)) {
+            throw new ServiceNotFoundException('Service not found: '.$name);
+        }
+    }
+
+    private function checkIfServiceIsWellFormed($entry, $name)
+    {
+        if (!is_array($entry) || !isset($entry['class'])) {
+            throw new ContainerException($name.' service entry must be an array containing a \'class\' key');
+        } elseif (!class_exists($entry['class'])) {
+            throw new ContainerException($name.' service class does not exist: '.$entry['class']);
+        } elseif (isset($entry['lock'])) {
+            throw new ContainerException($name.' service contains a circular reference');
+        }
+    }
+
+    private function checkServiceCalls($service, $callDefinition, $name)
+    {
+        if (!is_array($callDefinition) || !isset($callDefinition['method'])) {
+            throw new ContainerException($name.' service calls must be arrays containing a \'method\' key');
+        } elseif (!is_callable([$service, $callDefinition['method']])) {
+            throw new ContainerException($name.' service asks for call to uncallable method: '.$callDefinition['method']);
+        }
     }
 
     private function getArguments($definitionSet)
