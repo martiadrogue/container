@@ -36,7 +36,7 @@ class Container implements ServiceFillable, ParameterFillable
     public function get($name)
     {
         $this->checkIfServiceExists($name);
-        $this->saveServiceToStore($name);
+        $this->saveServiceInStore($name);
 
         return $this->serviceStore[$name];
     }
@@ -117,7 +117,7 @@ class Container implements ServiceFillable, ParameterFillable
         return $argumentSet;
     }
 
-    private function saveServiceToStore($name)
+    private function saveServiceInStore($name)
     {
         if (!isset($this->serviceStore[$name])) {
             $this->serviceStore[$name] = $this->createService($name);
