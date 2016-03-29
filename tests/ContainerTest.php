@@ -95,42 +95,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container($services, $parameters);
         $service = $container->get('service');
         $this->assertInstanceOf(MockService::class, $service);
+
+        return $service;
     }
 
-    /** @test */
-    public function shouldTheServiceCallsHaveInicialized() {
-        $services = [
-            'service' => [
-                'class' => MockService::class,
-                'arguments' => [
-                    new ServiceReference('dependency'),
-                    'foo',
-                ],
-                'calls' => [
-                    [
-                        'method' => 'setProperty',
-                        'arguments' => [
-                            new ParameterReference('group.param'),
-                        ],
-                    ],
-                ],
-            ],
-            'dependency' => [
-                'class' => MockDependency::class,
-                'arguments' => [
-                    new ParameterReference('group.param'),
-                ],
-            ],
-        ];
-        $parameters = [
-            'group' => [
-                'param' => 'bar',
-            ],
-        ];
-
-        $container = new Container($services, $parameters);
-        $service = $container->get('service');
-        $this->assertEquals('bar', $service->getProperty());
+    /**
+     * @depends shouldReciveServiceRequired
+     * @test
+     */
+    public function shouldTheServiceCallsHaveInicialized(MockService $service) {
+        $property = $service->getProperty();
+        $this->assertEquals('bar', $property);
     }
 
 
@@ -172,40 +147,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($dependency, $service->getDependency());
     }
 
-    /** @test */
-    public function shouldServiceParameterHaveBeenLoadedCorrectly()
+    /**
+     * @depends shouldReciveServiceRequired
+     * @test
+     */
+    public function shouldServiceParameterHaveBeenLoadedCorrectly(MockService $service)
     {
-        $services = [
-            'service' => [
-                'class' => MockService::class,
-                'arguments' => [
-                    new ServiceReference('dependency'),
-                    'foo',
-                ],
-                'calls' => [
-                    [
-                        'method' => 'setProperty',
-                        'arguments' => [
-                            new ParameterReference('group.param'),
-                        ],
-                    ],
-                ],
-            ],
-            'dependency' => [
-                'class' => MockDependency::class,
-                'arguments' => [
-                    new ParameterReference('group.param'),
-                ],
-            ],
-        ];
-        $parameters = [
-            'group' => [
-                'param' => 'bar',
-            ],
-        ];
-        $container = new Container($services, $parameters);
-        $service = $container->get('service');
-
         $this->assertEquals('foo', $service->getParameter());
     }
 
