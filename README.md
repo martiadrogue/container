@@ -19,13 +19,17 @@ $ composer require martiadrogue/container
 ## Usage
 
 ``` php
-$skeleton = new MartiAdrogue\Skeleton();
-echo $skeleton->echoPhrase('Hello, world!');
+$parameters = [
+    'first' => [
+        'second' => 'foo',
+        'third' => [
+            'fourth' => 'bar',
+        ],
+    ],
+];
+$container = new MartiAdrogue\Container([], parameters);
+echo $container->getParameter('first.third.fourth');
 ```
-
-## Change log
-
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
 ## Testing
 
