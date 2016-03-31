@@ -3,7 +3,7 @@
 namespace MartiAdrogue\Container;
 
 use ReflectionClass;
-use ReflectionMethod;
+use MartiAdrogue\Container\Common\Reflector;
 use MartiAdrogue\Container\Exception\ServiceNotFoundException;
 use MartiAdrogue\Container\Exception\ParameterNotFoundException;
 use MartiAdrogue\Container\Exception\ContainerException;
@@ -89,10 +89,12 @@ class Container implements ServiceFillable, ParameterFillable
         $entry['lock'] = true;
 
         $arguments = $this->getArguments($entry['arguments']);
-        $service = $this->getServiceByReflection($entry['class'], $arguments);
+        $phpReflector = new ReflectionClass($entry['class']);
+        $reflector = new Reflector($phpReflector);
+        $service = $reflector->getClass($arguments);
 
         if (isset($entry['calls'])) {
-            $this->initializeService($service, $entry['class'], $name, $entry['calls']);
+            $this->initializeService($service, $reflector, $name, $entry['calls']);
         }
 
         return $service;
@@ -124,13 +126,13 @@ class Container implements ServiceFillable, ParameterFillable
         }
     }
 
-    private function initializeService($service, $className, $name, array $callDefinitionSet)
+    private function initializeService($service, $reflector, $name, array $callDefinitionSet)
     {
         foreach ($callDefinitionSet as $callDefinition) {
             $this->checkServiceCalls($service, $callDefinition, $name);
 
-            $arguments = $this->getArguments($callDefinition['arguments'], $callDefinition['arguments']);
-            $this->callMethodByReflection($service, $className, $callDefinition['method'], $arguments);
+            $arguments = $this->getArguments($callDefinition['arguments']);
+            $reflector->callSetMethod($callDefinition['method'], $arguments);
         }
     }
 
@@ -186,19 +188,5 @@ class Container implements ServiceFillable, ParameterFillable
         }
 
         return [];
-    }
-
-    private function getServiceByReflection($className, $arguments)
-    {
-        $reflector = new ReflectionClass($className);
-
-        return $reflector->newInstanceArgs($arguments);
-    }
-
-    private function callMethodByReflection($object, $className, $methodName, array $arguments)
-    {
-        $reflector = new ReflectionMethod($className, $methodName);
-
-        return $reflector->invokeArgs($object, $arguments);
     }
 }
