@@ -24,7 +24,9 @@ class Reflector
 
     public function callSetMethod($name, array $arguments)
     {
-        $reflectionMethod = new ReflectionMethod($this->reflectionClass->getName(), $name);
-        $reflectionMethod->invokeArgs($this->object, $arguments);
+        if (isset($this->object)) {
+            $reflectionMethod = new ReflectionMethod($this->reflectionClass->getName(), $name);
+            $reflectionMethod->invokeArgs($this->object, $arguments);
+        }
     }
 }
