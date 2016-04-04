@@ -41,7 +41,7 @@
     },
     "scripts": {
         "test": "phpunit",
-        "phpcs": "php-cs-fixer fix -v --diff --dry-run;"
+        "phpcs": "php-cs-fixer fix --diff --dry-run"
     },
     "extra": {
         "branch-alias": {
