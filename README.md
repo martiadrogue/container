@@ -6,15 +6,37 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-An amazing, easy to follow PHP dependency injection container package. Made with PSR-2 and PSR-4.
+An amazing, easy to follow PHP dependency injection container package. Made with
+PSR-2 and PSR-4.
 
 ## Install
 
-Via Composer
+Via Composer, update your composer.json to use martiadrogue/container
 
-``` bash
-$ composer require martiadrogue/container
+```json
+"repositories": [
+    {
+        "type": "git",
+        "url": "https://github.com/martiadrogue/container.git"
+    }
+],
 ```
+
+Then you must add martiadrogue/container in require.
+
+```json
+"require": {
+    "martiadrogue/container": "dev-devel"
+},
+```
+
+Or invoke
+
+```shell
+composer require martiadrogue/container:@dev
+```
+
+Old school, forget all and grab files from [dist directory][link-download]
 
 ## Usage
 
@@ -37,18 +59,29 @@ echo $container->getParameter('first.third.fourth');
 $ composer test
 ```
 
+## Code Smell Fix
+
+`composer format` run php-cs-fixer and phpcbf to fix up the PHP code to follow
+the coding standards.
+
+``` bash
+composer format
+```
+
 ## Contributing
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for details.
+Please see [CONTRIBUTING](CONTRIBUTING.md) and [CONDUCT](CONDUCT.md) for
+details.
 
 ## Security
 
-If you discover any security related issues, please email marti.adrogue@gmail.com instead of using the issue tracker.
+If you discover any security related issues, please email
+marti.adrogue@gmail.com instead of using the issue tracker.
 
 ## Credits
 
-- [Martí Adrogué][link-author]
-- [All Contributors][link-contributors]
+-   [Martí Adrogué][link-author]
+-   [All Contributors][link-contributors]
 
 ## License
 
@@ -66,3 +99,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-downloads]: https://packagist.org/packages/martiadrogue/container
 [link-author]: https://github.com/martiadrogue
 [link-contributors]: ../../contributors
+[link-download]: https://github.com/martiadrogue/:package_name/archive/master.zip
