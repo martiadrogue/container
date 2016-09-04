@@ -3,8 +3,13 @@
 namespace MartiAdrogue\Container;
 
 use MartiAdrogue\Container\Reference\ServiceReference;
+use MartiAdrogue\Container\Reference\AbstractReference;
 use MartiAdrogue\Container\Reference\ParameterReference;
 
+/**
+ * @covers MartiAdrogue\Container\Container
+ * @uses MartiAdrogue\Container\Exception\ParameterNotFoundException
+ */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
@@ -61,7 +66,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($container->hasParameter('foo.bar'));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @uses MartiAdrogue\Container\Common\Reflector
+     * @uses MartiAdrogue\Container\Reference\AbstractReference
+     */
     public function shouldReciveServiceRequired() {
         $services = [
             'service' => [
@@ -117,7 +126,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $service->getParameter());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @uses MartiAdrogue\Container\Common\Reflector
+     * @uses MartiAdrogue\Container\Reference\AbstractReference
+     */
     public function shouldDepencencyParameterHaveBeenLoadedCorrectly()
     {
         $services = [
@@ -154,7 +167,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $dependency->getParameter());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @uses MartiAdrogue\Container\Common\Reflector
+     * @uses MartiAdrogue\Container\Reference\AbstractReference
+     */
     public function shouldReciveDepencencyOfAService() {
         $services = [
             'service' => [
@@ -194,6 +211,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @uses MartiAdrogue\Container\Exception\ServiceNotFoundException
      * @expectedException MartiAdrogue\Container\Exception\ServiceNotFoundException
      */
     public function shouldLaunchServiceNotFoundException()
@@ -214,6 +232,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage must be an array containing a 'class' key
      */
@@ -225,6 +244,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage class does not exist
      */
@@ -236,6 +256,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @uses MartiAdrogue\Container\Reference\AbstractReference
+     * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage circular reference
      */
@@ -260,6 +282,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @uses MartiAdrogue\Container\Common\Reflector
+     * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage service calls must be arrays containing a 'method' key
      */
@@ -281,6 +305,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @uses MartiAdrogue\Container\Common\Reflector
+     * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage call to uncallable method
      */
