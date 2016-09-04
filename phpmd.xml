@@ -25,15 +25,19 @@
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateField" />
   <rule ref="rulesets/unusedcode.xml/UnusedPrivateMethod" />
 
-  <rule ref="rulesets/unusedcode.xml/ShortVariable">
+  <rule ref="rulesets/naming.xml">
+      <exclude name="ShortVariable"/>
+  </rule>
+
+  <rule ref="rulesets/naming.xml/ShortVariable"
+          since="0.2"
+          message="Avoid variables with short names like {0}. Configured minimum length is {1}."
+          class="PHPMD\Rule\Naming\ShortVariable"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#shortvariable">
+    <priority>3</priority>
     <properties>
-      <property name="xpath">
-        <value>
-          //VariableDeclaratorId[(string-length(@Image) < 3) and (not (@Image='id'))]
-          [not(ancestor::ForInit)]
-          [not((ancestor::FormalParameter) and (ancestor::TryStatement))]
-        </value>
-    </property>
+        <property name="minimum" description="Minimum length for a variable, property or parameter name" value="3"/>
+        <property name="exceptions" value="id" />
     </properties>
   </rule>
 </ruleset>
