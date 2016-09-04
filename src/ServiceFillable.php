@@ -5,15 +5,16 @@ namespace MartiAdrogue\Container;
 use Interop\Container\ContainerInterface;
 
 /**
- * {@inheritDoc}
+ * {@inheritdoc}
  */
-interface ServiceFillable extends ContainerInterface {
+interface ServiceFillable extends ContainerInterface
+{
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function get($name);
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function has($name);
 }
