@@ -40,7 +40,10 @@
     },
     "scripts": {
         "test": "phpunit",
-        "phpcs": "php-cs-fixer fix --diff --dry-run"
+        "phpcs": [
+            "php-cs-fixer fix --diff --dry-run",
+            "phpcbf --standard=psr2 src/"
+        ]
     },
     "extra": {
         "branch-alias": {
