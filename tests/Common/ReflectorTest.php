@@ -1,6 +1,6 @@
 <?php
 
-namespace MartiAdrogue\Skeleton;
+namespace MartiAdrogue\Container\Common;
 
 use ReflectionClass;
 use Object;
