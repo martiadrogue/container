@@ -1,6 +1,6 @@
 <?php
 
-namespace MartiAdrogue\Skeleton;
+namespace MartiAdrogue\Container\Reference;
 
 use MartiAdrogue\Container\Reference\ParameterReference;
 
