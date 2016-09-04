@@ -71,7 +71,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses MartiAdrogue\Container\Reference\AbstractReference
      */
-    public function shouldReciveServiceRequired() {
+    public function shouldReciveServiceRequired()
+    {
         $services = [
             'service' => [
                 'class' => MockService::class,
@@ -112,7 +113,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @depends shouldReciveServiceRequired
      * @test
      */
-    public function shouldTheServiceCallsHaveInicialized(MockService $service) {
+    public function shouldTheServiceCallsHaveInicialized(MockService $service)
+    {
         $property = $service->getProperty();
         $this->assertEquals('bar', $property);
     }
@@ -172,7 +174,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses MartiAdrogue\Container\Reference\AbstractReference
      */
-    public function shouldReciveDepencencyOfAService() {
+    public function shouldReciveDepencencyOfAService()
+    {
         $services = [
             'service' => [
                 'class' => MockService::class,
