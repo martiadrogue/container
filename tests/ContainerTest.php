@@ -253,114 +253,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
      * @covers MartiAdrogue\Container\Container::getParameter
-     * @uses MartiAdrogue\Container\ServiceLoader
-     * @uses MartiAdrogue\Container\Exception\ServiceNotFoundException
-     * @expectedException MartiAdrogue\Container\Exception\ServiceNotFoundException
-     */
-    public function shouldLaunchServiceNotFoundException()
-    {
-        $container = new Container([], []);
-        $container->get('foo');
-    }
-
-    /**
-     * @test
-     * @covers MartiAdrogue\Container\Container::__construct
-     * @covers MartiAdrogue\Container\Container::get
-     * @covers MartiAdrogue\Container\Container::has
-     * @covers MartiAdrogue\Container\Container::getParameter
      * @expectedException MartiAdrogue\Container\Exception\ParameterNotFoundException
      */
     public function shouldLaunchParameterNotFoundExceptionWhenAskForAParameterThatNeverExists()
     {
         $container = new Container([], []);
         $container->getParameter('foo');
-    }
-
-    /**
-     * @test
-     * @covers MartiAdrogue\Container\Container::__construct
-     * @covers MartiAdrogue\Container\Container::get
-     * @covers MartiAdrogue\Container\Container::has
-     * @uses MartiAdrogue\Container\ServiceLoader
-     * @uses        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedException        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedExceptionMessage must be an array containing a 'class' key
-     */
-    public function shouldLaunchContainerExceptionAfterABadServiceEntry()
-    {
-        $container = new Container(['foo' => 'bar'], []);
-        $container->get('foo');
-    }
-
-    /**
-     * @test
-     * @covers MartiAdrogue\Container\Container::__construct
-     * @covers MartiAdrogue\Container\Container::get
-     * @covers MartiAdrogue\Container\Container::has
-     * @uses MartiAdrogue\Container\ServiceLoader
-     * @uses        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedException        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedExceptionMessage class does not exist
-     */
-    public function shouldLaunchContainerExceptionAfterAnInvalidClassPath()
-    {
-        $container = new Container(['foo' => ['class' => 'LALALALALALA']], []);
-        $container->get('foo');
-    }
-
-    /**
-     * @test
-     * @covers MartiAdrogue\Container\Container::__construct
-     * @covers MartiAdrogue\Container\Container::get
-     * @covers MartiAdrogue\Container\Container::has
-     * @uses MartiAdrogue\Container\ServiceLoader
-     * @uses MartiAdrogue\Container\Common\Reflector
-     * @uses        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedException        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedExceptionMessage service calls must be arrays containing a 'method' key
-     */
-    public function shouldLaunchContainerExceptionWhenThereIsNoMethod()
-    {
-        $container = new Container([
-            'foo' => [
-                'class' => MockDependency::class,
-                'arguments' => [
-                    'foo',
-                ],
-                'calls' => [
-                    ['foo'],
-                ],
-            ],
-        ], []);
-        $container->get('foo');
-    }
-
-    /**
-     * @test
-     * @covers MartiAdrogue\Container\Container::__construct
-     * @covers MartiAdrogue\Container\Container::get
-     * @covers MartiAdrogue\Container\Container::has
-     * @uses MartiAdrogue\Container\ServiceLoader
-     * @uses MartiAdrogue\Container\Common\Reflector
-     * @uses        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedException        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedExceptionMessage call to uncallable method
-     */
-    public function shouldLaunchContainerExceptionWhenThereIsAnUncallableMethod()
-    {
-        $container = new Container([
-            'foo' => [
-                'class' => MockDependency::class,
-                'arguments' => [
-                    'foo',
-                ],
-                'calls' => [
-                    ['method' => 'LALALALALA'],
-                ],
-            ],
-        ], []);
-        $container->get('foo');
     }
 }
 

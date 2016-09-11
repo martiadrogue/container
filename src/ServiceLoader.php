@@ -80,10 +80,10 @@ class ServiceLoader
         }
     }
 
-    private function checkFormat($entry, $name)
+    private function checkFormat(array $entry, $name)
     {
-        if (!is_array($entry) || !isset($entry['class'])) {
-            throw new ContainerException($name.' service entry must be an array containing a \'class\' key');
+        if (!isset($entry['class'])) {
+            throw new ContainerException($name.' array service entry must containing a \'class\' key');
         } elseif (!class_exists($entry['class'])) {
             throw new ContainerException($name.' service class does not exist: '.$entry['class']);
         } elseif (isset($entry['lock'])) {
@@ -94,7 +94,7 @@ class ServiceLoader
     private function checkCalls($service, $callDefinition, $name)
     {
         if (!is_array($callDefinition) || !isset($callDefinition['method'])) {
-            throw new ContainerException($name.' service calls must be arrays containing a \'method\' key');
+            throw new ContainerException($name.' array service entry must containing a \'method\' key');
         } elseif (!is_callable([$service, $callDefinition['method']])) {
             throw new ContainerException($name.' service asks for call to uncallable method: '.
                 $callDefinition['method']);
