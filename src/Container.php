@@ -10,6 +10,8 @@ use MartiAdrogue\Container\Exception\ContainerException;
 use MartiAdrogue\Container\Reference\ParameterReference;
 use MartiAdrogue\Container\Reference\ServiceReference;
 
+use MartiAdrogue\Container\ServiceLoader;
+
 /**
  * Loading the definitions into properties that can be accessed later. We have
  * also created a serviceStore property, and initialized it to be an empty
@@ -21,13 +23,13 @@ class Container implements ServiceFillable, ParameterFillable
 {
     private $serviceSet;
     private $parameterSet;
-    private $ServiceStore;
+    private $serviceStore;
 
     public function __construct(array $serviceSet, array $parameterSet)
     {
         $this->serviceSet = $serviceSet;
         $this->parameterSet = $parameterSet;
-        $this->ServiceStore = [];
+        $this->serviceStore = [];
     }
 
     /**
@@ -35,8 +37,9 @@ class Container implements ServiceFillable, ParameterFillable
      */
     public function get($name)
     {
-        $this->checkIfServiceExists($name);
-        $this->saveServiceInStore($name);
+        $loader = new ServiceLoader($this);
+        $loader->check($name);
+        $this->saveServiceInStore($name, $loader);
 
         return $this->serviceStore[$name];
     }
@@ -82,57 +85,11 @@ class Container implements ServiceFillable, ParameterFillable
         return true;
     }
 
-    private function createService($name)
-    {
-        $entry = &$this->serviceSet[$name];
-        $this->checkIfServiceIsWellFormed($entry, $name);
-        $entry['lock'] = true;
-
-        $arguments = $this->getArguments($entry['arguments']);
-        $phpReflector = new ReflectionClass($entry['class']);
-        $reflector = new Reflector($phpReflector);
-        $service = $reflector->getClass($arguments);
-
-        if (isset($entry['calls'])) {
-            $this->initializeService($service, $reflector, $name, $entry['calls']);
-        }
-
-        return $service;
-    }
-
-    private function resolveArguments(array $definitionSet)
-    {
-        $argumentSet = [];
-        foreach ($definitionSet as $definition) {
-            $argument = $definition;
-            if ($definition instanceof ServiceReference) {
-                $serviceName = $definition->getName();
-                $argument = $this->get($serviceName);
-            } elseif ($definition instanceof ParameterReference) {
-                $parameterName = $definition->getName();
-                $argument = $this->getParameter($parameterName);
-            }
-
-            $argumentSet[] = $argument;
-        }
-
-        return $argumentSet;
-    }
-
-    private function saveServiceInStore($name)
+    private function saveServiceInStore($name, $loader)
     {
         if (!isset($this->serviceStore[$name])) {
-            $this->serviceStore[$name] = $this->createService($name);
-        }
-    }
-
-    private function initializeService($service, $reflector, $name, array $callDefinitionSet)
-    {
-        foreach ($callDefinitionSet as $callDefinition) {
-            $this->checkServiceCalls($service, $callDefinition, $name);
-
-            $arguments = $this->getArguments($callDefinition['arguments']);
-            $reflector->callSetMethod($callDefinition['method'], $arguments);
+            $entry = $this->serviceSet[$name];
+            $this->serviceStore[$name] = $loader->create($entry, $name);
         }
     }
 
@@ -152,42 +109,5 @@ class Container implements ServiceFillable, ParameterFillable
         if (!isset($context[$token])) {
             throw new ParameterNotFoundException('Parameter not found: '.$token);
         }
-    }
-
-    private function checkIfServiceExists($name)
-    {
-        if (!$this->has($name)) {
-            throw new ServiceNotFoundException('Service not found: '.$name);
-        }
-    }
-
-    private function checkIfServiceIsWellFormed($entry, $name)
-    {
-        if (!is_array($entry) || !isset($entry['class'])) {
-            throw new ContainerException($name.' service entry must be an array containing a \'class\' key');
-        } elseif (!class_exists($entry['class'])) {
-            throw new ContainerException($name.' service class does not exist: '.$entry['class']);
-        } elseif (isset($entry['lock'])) {
-            throw new ContainerException($name.' service contains a circular reference');
-        }
-    }
-
-    private function checkServiceCalls($service, $callDefinition, $name)
-    {
-        if (!is_array($callDefinition) || !isset($callDefinition['method'])) {
-            throw new ContainerException($name.' service calls must be arrays containing a \'method\' key');
-        } elseif (!is_callable([$service, $callDefinition['method']])) {
-            throw new ContainerException($name.' service asks for call to uncallable method: '.
-                $callDefinition['method']);
-        }
-    }
-
-    private function getArguments($definitionSet)
-    {
-        if (isset($definitionSet)) {
-            return $this->resolveArguments($definitionSet);
-        }
-
-        return [];
     }
 }

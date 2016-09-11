@@ -6,6 +6,8 @@ use MartiAdrogue\Container\Reference\ServiceReference;
 use MartiAdrogue\Container\Reference\AbstractReference;
 use MartiAdrogue\Container\Reference\ParameterReference;
 
+use MartiAdrogue\Container\ServiceLoader;
+
 /**
  * @covers MartiAdrogue\Container\Container::<!public>
  * @uses MartiAdrogue\Container\Exception\ParameterNotFoundException
@@ -90,6 +92,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
      * @covers MartiAdrogue\Container\Container::getParameter
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses MartiAdrogue\Container\Reference\AbstractReference
      */
@@ -156,6 +159,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
      * @covers MartiAdrogue\Container\Container::getParameter
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses MartiAdrogue\Container\Reference\AbstractReference
      */
@@ -201,6 +205,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::getParameter
      * @covers MartiAdrogue\Container\Container::has
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses MartiAdrogue\Container\Reference\AbstractReference
      */
@@ -248,6 +253,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
      * @covers MartiAdrogue\Container\Container::getParameter
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses MartiAdrogue\Container\Exception\ServiceNotFoundException
      * @expectedException MartiAdrogue\Container\Exception\ServiceNotFoundException
      */
@@ -276,6 +282,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::__construct
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage must be an array containing a 'class' key
@@ -291,6 +298,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::__construct
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
      * @expectedExceptionMessage class does not exist
@@ -306,35 +314,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::__construct
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
-     * @uses MartiAdrogue\Container\Reference\AbstractReference
-     * @uses        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedException        MartiAdrogue\Container\Exception\ContainerException
-     * @expectedExceptionMessage circular reference
-     */
-    public function shouldLaunchContainerExceptionWhenThereIsACircularReference()
-    {
-        $container = new Container([
-            'foo' => [
-                'class' => MockService::class,
-                'arguments' => [
-                    new ServiceReference('bar'),
-                ],
-            ],
-            'bar' => [
-                'class' => MockService::class,
-                'arguments' => [
-                    new ServiceReference('foo'),
-                ],
-            ],
-        ], []);
-        $container->get('foo');
-    }
-
-    /**
-     * @test
-     * @covers MartiAdrogue\Container\Container::__construct
-     * @covers MartiAdrogue\Container\Container::get
-     * @covers MartiAdrogue\Container\Container::has
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
@@ -361,6 +341,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @covers MartiAdrogue\Container\Container::__construct
      * @covers MartiAdrogue\Container\Container::get
      * @covers MartiAdrogue\Container\Container::has
+     * @uses MartiAdrogue\Container\ServiceLoader
      * @uses MartiAdrogue\Container\Common\Reflector
      * @uses        MartiAdrogue\Container\Exception\ContainerException
      * @expectedException        MartiAdrogue\Container\Exception\ContainerException
