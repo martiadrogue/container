@@ -80,7 +80,6 @@ class ServiceLoader
         }
     }
 
-
     private function checkFormat($entry, $name)
     {
         if (!is_array($entry) || !isset($entry['class'])) {
