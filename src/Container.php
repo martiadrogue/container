@@ -2,15 +2,8 @@
 
 namespace MartiAdrogue\Container;
 
-use ReflectionClass;
-use MartiAdrogue\Container\Common\Reflector;
 use MartiAdrogue\Container\Exception\ServiceNotFoundException;
 use MartiAdrogue\Container\Exception\ParameterNotFoundException;
-use MartiAdrogue\Container\Exception\ContainerException;
-use MartiAdrogue\Container\Reference\ParameterReference;
-use MartiAdrogue\Container\Reference\ServiceReference;
-
-use MartiAdrogue\Container\ServiceLoader;
 
 /**
  * Loading the definitions into properties that can be accessed later. We have
