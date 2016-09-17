@@ -15,6 +15,6 @@ class ParameterNotFoundException extends Exception
 
     public function __construct()
     {
-        # code...
+        // code...
     }
 }

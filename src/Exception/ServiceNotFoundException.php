@@ -16,6 +16,6 @@ class ServiceNotFoundException extends Exception implements InteropNotFoundExcep
 
     public function __construct()
     {
-        # code...
+        // code...
     }
 }
