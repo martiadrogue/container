@@ -6,7 +6,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-An amazing, easy to follow PHP dependency injection container package. Made with
+Amazing, easy to follow PHP dependency injection container package. Made with
 PSR-2 and PSR-4.
 
 ## Install
@@ -36,7 +36,7 @@ Or invoke
 composer require martiadrogue/container:@dev
 ```
 
-Old school, forget all and grab files from [dist directory][link-download]
+Old school, forget all and grab files from [this directory][link-download]
 
 ## Usage
 
